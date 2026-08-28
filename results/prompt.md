@@ -33,11 +33,48 @@ For each model directory under `results/`:
      for `hello-go-bubbletea`: does `q` quit)?
    - Note anything interesting: creative choices, bugs, hallucinated
      dependencies, deviations from the prompt.
-4. Write the report as `results/<model>/README.md` using the template below.
+4. Score the run using the scoring rules below.
+5. Write the report as `results/<model>/README.md` using the template below.
 
 Do not modify anything inside the numbered run directories except as needed to
 build (e.g. running `go mod tidy`); never edit the model's source code. If a
 run doesn't build or run, report that honestly — do not fix it.
+
+## Scoring
+
+Each run gets a **score out of 10**, and each test gets a **combined average
+score** across its runs, so models can be compared at a glance.
+
+Score each run against this rubric:
+
+- **Builds (0–3):** 3 = builds cleanly as delivered; 2 = builds only after
+  routine fixes you are allowed to make (e.g. `go mod tidy`); 0 = does not
+  build. (1 is unused; building is nearly all-or-nothing.)
+- **Runs (0–2):** 2 = starts and runs without crashing; 1 = runs but with
+  visible errors or glitches; 0 = crashes at startup or doesn't run.
+- **Meets requirements (0–3):** 3 = satisfies every strict requirement in the
+  test's `prompt.md`; deduct 1 per missed requirement, down to 0.
+- **Quality (0–2):** 2 = clean, idiomatic code with no notable defects;
+  1 = works but with sloppy or non-idiomatic code, dead code, or hallucinated/
+  unnecessary dependencies; 0 = significant bugs or badly structured code even
+  if requirements are technically met.
+
+Rules:
+
+- A run that does not build is capped at its Builds points (score ≤ 3 total);
+  do not award Runs, Requirements, or Quality points for code you could not
+  execute.
+- Report the score as a breakdown plus total, e.g. `3 + 2 + 3 + 1 = 9/10`, in
+  each run's subsection, and put the total in the summary table's Score
+  column.
+- The **combined average score** for a test is the arithmetic mean of its runs'
+  totals, rounded to one decimal place (e.g. `7.3/10`). State it directly
+  below the test's summary table as `**Average score: <x.y>/10**`.
+- If a model has multiple tests, end the report with an `## Overall` section
+  giving the model's overall average: the mean of the per-test average scores,
+  rounded to one decimal place.
+- Apply the rubric identically across models and runs; the score column is the
+  factual verdict — keep subjective impressions out of it and in the prose.
 
 ## Recording GIFs for CLI / TUI results
 
@@ -73,10 +110,12 @@ Results for locally hosted model `<model name>`.
 > One-sentence summary of what `prompts/<test-name>/prompt.md` asked for,
 > including its strict requirement(s).
 
-| Run | Builds | Runs | Meets requirements | Notes |
-|-----|--------|------|--------------------|-------|
-| 1   | ✅/❌  | ✅/❌ | ✅/❌             | one-liner |
-| …   |        |      |                    |         |
+| Run | Builds | Runs | Meets requirements | Score | Notes |
+|-----|--------|------|--------------------|-------|-------|
+| 1   | ✅/❌  | ✅/❌ | ✅/❌             | n/10  | one-liner |
+| …   |        |      |                    |       |         |
+
+**Average score: <x.y>/10**
 
 ### Run 1
 
@@ -84,9 +123,15 @@ Results for locally hosted model `<model name>`.
 
 Two to five sentences: what the model built, what's notable (creativity,
 correctness, style), and any failures with the relevant error message.
+End with the score breakdown, e.g. `Score: 3 + 2 + 3 + 1 = 9/10`.
 
 ### Run 2
 …
+
+## Overall
+
+**Overall average score: <x.y>/10** (only when the model has more than one
+test; mean of the per-test averages.)
 ```
 
 Rules for consistency, including with future test prompts:
