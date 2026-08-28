@@ -1,0 +1,7 @@
+# Compiled Go binaries left inside result run directories.
+# Binary names follow each run's module name; extend this list as new ones appear.
+results/*/*/*/hello
+results/*/*/*/hello-bubbletea
+results/*/*/*/hello-wave
+results/*/*/*/*/hello
+results/*/*/*/*/hello-go-bubbletea
