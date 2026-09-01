@@ -2,7 +2,7 @@
 
 You are generating evaluation reports for prompts that were run against locally
 hosted LLM models. Work through the directory structure described below and
-produce one `README.md` report per model directory.
+produce one `README.md` report per model **per test**.
 
 ## Directory layout
 
@@ -12,22 +12,24 @@ produce one `README.md` report per model directory.
   name).
 - `results/<model>/<test-name>/<n>/` — numbered directories (`1/`, `2/`, `3/`,
   …), each holding one independent run of that prompt by that model.
-- `results/<model>/README.md` — the report you generate. One per model,
-  covering all of that model's tests and runs.
+- `results/<model>/<test-name>/README.md` — the report you generate: one per
+  model per test, covering all of that model's runs of that test.
 - `results/.rubric/<test-name>.md` — the scoring rubric for each test (see
   Scoring below). Not a model directory; skip it when iterating models.
 
 ## Procedure
 
-For each model directory under `results/`:
+For each model directory under `results/`, and each `<test-name>`
+subdirectory within it:
 
-1. **If `results/<model>/README.md` already exists, skip this model
-   entirely.** Do not read the existing file — assume it is complete and move
-   on to the next model directory.
-2. For each `<test-name>` subdirectory, read the matching
-   `prompts/<test-name>/prompt.md` so you understand what the model was asked
-   to do and what the strict requirements are, and the test's rubric in
-   `results/.rubric/<test-name>.md` for how to evaluate it.
+1. **If `results/<model>/<test-name>/README.md` already exists, skip that
+   test for that model entirely.** Do not read the existing file — assume it
+   is complete and move on. A test directory containing only run directories
+   with prompt copies (no model output) is scaffolded but not yet executed:
+   skip it too, without writing a report.
+2. Read the matching `prompts/<test-name>/prompt.md` so you understand what
+   the model was asked to do and what the strict requirements are, and the
+   test's rubric in `results/.rubric/<test-name>.md` for how to evaluate it.
 3. For each numbered run directory, evaluate the result as the rubric
    directs. For build-and-run tests that means:
    - What did the model produce (files, completeness)?
@@ -38,7 +40,8 @@ For each model directory under `results/`:
    - Note anything interesting: creative choices, bugs, hallucinated
      dependencies, deviations from the prompt.
 4. Score the run using the scoring rules below.
-5. Write the report as `results/<model>/README.md` using the template below.
+5. Write the report as `results/<model>/<test-name>/README.md` using the
+   template below.
 
 Do not modify anything inside the numbered run directories except as needed to
 build (e.g. running `go mod tidy`); never edit the model's source code. If a
@@ -65,9 +68,9 @@ Rules that apply to every test:
 - The **combined average score** for a test is the arithmetic mean of its runs'
   totals, rounded to one decimal place (e.g. `7.3/10`). State it directly
   below the test's summary table as `**Average score: <x.y>/10**`.
-- If a model has multiple tests, end the report with an `## Overall` section
-  giving the model's overall average: the mean of the per-test average scores,
-  rounded to one decimal place.
+- Cross-test and cross-model comparisons live in the index at
+  `results/README.md`, not in per-test reports; a report covers exactly one
+  model on exactly one test.
 - Apply the rubric identically across models and runs; the score column is the
   factual verdict — keep subjective impressions out of it and in the prose.
 
@@ -85,22 +88,20 @@ short demo GIF of each successfully running result and embed it in the report.
   long enough to show it off (a few seconds — include any interaction the
   program invites, such as key presses), then exercises the quit key.
 - Save the GIF and its `.tape` script inside the run's numbered directory as
-  `demo.gif` and `demo.tape`, and embed it in the README with a relative path,
-  e.g. `![run 1](hello-go-bubbletea/1/demo.gif)`.
+  `demo.gif` and `demo.tape`, and embed it in the README with a relative path
+  from the test directory, e.g. `![run 1](1/demo.gif)`.
 - If a run fails to build or crashes at startup, do not record a GIF; report
   the failure instead.
 
 ## Report template
 
 Every `README.md` must follow this structure so reports look and feel
-consistent across models:
+consistent across models and tests:
 
 ```markdown
-# <model directory name>
+# <model name> — <test-name>
 
-Results for locally hosted model `<model name>`.
-
-## <test-name>
+Results for locally hosted model `<model name>` on the `<test-name>` test.
 
 > One-sentence summary of what `prompts/<test-name>/prompt.md` asked for,
 > including its strict requirement(s).
@@ -112,28 +113,24 @@ Results for locally hosted model `<model name>`.
 
 **Average score: <x.y>/10**
 
-### Run 1
+## Run 1
 
-![run 1](<test-name>/1/demo.gif)
+![run 1](1/demo.gif)
 
 Two to five sentences: what the model built, what's notable (creativity,
 correctness, style), and any failures with the relevant error message.
 End with the score breakdown, e.g. `Score: 3 + 2 + 3 + 1 = 9/10`.
 
-### Run 2
+## Run 2
 …
-
-## Overall
-
-**Overall average score: <x.y>/10** (only when the model has more than one
-test; mean of the per-test averages.)
 ```
 
 Rules for consistency, including with future test prompts:
 
-- One `## <test-name>` section per test, in alphabetical order; one
-  `### Run <n>` subsection per numbered directory, in numeric order.
+- One `## Run <n>` section per numbered directory, in numeric order.
 - Always include the summary table, even for a single run.
+- Use the summary-table columns the test's rubric specifies; the columns shown
+  above are the build-and-run default.
 - The GIF line appears only for CLI/TUI tests where a recording was made; for
   non-interactive prompts (or failed runs), substitute a fenced code block
   with representative output, or omit.

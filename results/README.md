@@ -1,13 +1,15 @@
 # Results
 
-Evaluation reports for locally hosted models, one report per model directory.
-Scoring rubric and report format are defined in [prompt.md](prompt.md).
+Evaluation reports for locally hosted models, one report per model per test
+in `<model>/<test-name>/README.md`. Scoring rubrics live in `.rubric/`; the
+report format and procedure are defined in
+[report-generation-prompt.md](report-generation-prompt.md).
 
-| Model | Tests | Overall average | Report |
-|-------|-------|-----------------|--------|
-| Fable-5 | hello-go-bubbletea (10.0), pr-review (10.0) | 10.0/10 | [Fable-5/README.md](Fable-5/README.md) |
-| Qwen3.6-35B-A3B | hello-go-bubbletea (7.3), pr-review (7.0) | 7.2/10 | [Qwen3.6-35B-A3B/README.md](Qwen3.6-35B-A3B/README.md) |
-| Qwen3-Coder-Next-UD-Q4_K_M | hello-go-bubbletea (5.3), pr-review (4.8) | 5.1/10 | [Qwen3-Coder-Next-UD-Q4_K_M/README.md](Qwen3-Coder-Next-UD-Q4_K_M/README.md) |
+| Model | Test reports | Overall average |
+|-------|--------------|-----------------|
+| Fable-5 | [hello-go-bubbletea](Fable-5/hello-go-bubbletea/README.md) (10.0), [pr-review](Fable-5/pr-review/README.md) (10.0) | 10.0/10 |
+| Qwen3.6-35B-A3B | [hello-go-bubbletea](Qwen3.6-35B-A3B/hello-go-bubbletea/README.md) (7.3), [pr-review](Qwen3.6-35B-A3B/pr-review/README.md) (7.0) | 7.2/10 |
+| Qwen3-Coder-Next-UD-Q4_K_M | [hello-go-bubbletea](Qwen3-Coder-Next-UD-Q4_K_M/hello-go-bubbletea/README.md) (5.3), [pr-review](Qwen3-Coder-Next-UD-Q4_K_M/pr-review/README.md) (4.8) | 5.1/10 |
 
 *(Fable-5's pr-review score carries a disclosure: the review corpus was
 authored with Fable-5 assistance, so a same-family advantage is possible.)*

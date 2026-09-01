@@ -1,7 +1,7 @@
 # Rubric: hello-go-bubbletea
 
 A build-and-run test: the model delivered a Go/Bubble Tea program. Actually
-build and run each result as described in `results/prompt.md`.
+build and run each result as described in `results/report-generation-prompt.md`.
 
 Score each run out of 10:
 
@@ -28,4 +28,4 @@ Report specifics:
 
 - Summary-table columns: `| Run | Builds | Runs | Meets requirements | Score | Notes |`.
 - This is a TUI test: record demo GIFs per the GIF instructions in
-  `results/prompt.md`.
+  `results/report-generation-prompt.md`.
