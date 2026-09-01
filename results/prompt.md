@@ -45,6 +45,12 @@ run doesn't build or run, report that honestly — do not fix it.
 Each run gets a **score out of 10**, and each test gets a **combined average
 score** across its runs, so models can be compared at a glance.
 
+Not every test is a build-and-run test. If a test's directory in `prompts/`
+contains an `answer-key.md`, score that test's runs with the key's rubric and
+follow its instructions (including any changes to the summary-table columns)
+in place of the generic rubric below. Never include an answer key in any
+model prompt.
+
 Score each run against this rubric:
 
 - **Builds (0–3):** 3 = builds cleanly as delivered; 2 = builds only after
