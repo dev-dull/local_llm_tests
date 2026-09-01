@@ -1,9 +1,12 @@
-# Answer key: pr-review
+# Rubric: pr-review
 
-**Never include this file in a model prompt.** It is for the human running the
-tests and for the Claude session generating result reports. The model under
-test sees only `prompt.md`; save its response as `review.md` in the run's
-numbered directory.
+A review-quality test: the model was asked to review six PRs and write the
+review to `results.md` in its run directory (if a model responded inline
+instead, save the response there yourself). There is nothing to build or run.
+
+This file is both the answer key and the scoring rubric. **It must never be
+included in a model prompt or copied into a run directory** — the model under
+test sees only `prompt.md`.
 
 The base program is `results/Qwen3.6-35B-A3B/hello-go-bubbletea/1/main.go`
 verbatim. All six PRs apply cleanly to it and compile (verified with Go 1.22
@@ -93,10 +96,9 @@ mode renders a blank screen. Compiles and runs without errors.
   change (positions previously advanced only while Rain mode was displayed —
   behavior here is equivalent, so this is a nit at most).
 
-## Scoring a run (out of 10)
+## Scoring
 
-Score the model's `review.md` with this rubric **instead of** the generic
-builds/runs rubric:
+Score each run's `results.md` out of 10:
 
 - **Verdicts (0–3):** start at 3; −1 for each PR whose verdict is outside the
   acceptable range listed above (floor 0).
@@ -109,8 +111,14 @@ builds/runs rubric:
   findings (e.g. the wrong claims called out above, invented APIs, nonexistent
   compile errors); 0 otherwise.
 
-Report the breakdown per run, e.g. `Score: 3 + 4 + 1 + 1 = 9/10`. In the
-report's summary table, replace the Builds/Runs/Meets requirements columns
-with: `| Run | Verdicts OK | Caught PR 3 | Caught PR 6 | Score | Notes |`.
-A run that ignores the required output format still gets scored on substance,
-but note the deviation in prose. No GIFs for this test.
+Report the breakdown per run, e.g. `Score: 3 + 4 + 1 + 1 = 9/10`.
+
+## Report specifics
+
+- Summary-table columns:
+  `| Run | Verdicts OK | Caught PR 3 | Caught PR 6 | Score | Notes |`.
+- A run that ignores the required output format (missing `results.md`, wrong
+  structure) still gets scored on substance, but note the deviation in prose.
+- If a copy of the old `answer-key.md` is present in a run directory, note in
+  the report that the model may have had access to the expected findings.
+- No GIFs for this test.

@@ -14,6 +14,8 @@ produce one `README.md` report per model directory.
   …), each holding one independent run of that prompt by that model.
 - `results/<model>/README.md` — the report you generate. One per model,
   covering all of that model's tests and runs.
+- `results/.rubric/<test-name>.md` — the scoring rubric for each test (see
+  Scoring below). Not a model directory; skip it when iterating models.
 
 ## Procedure
 
@@ -24,8 +26,10 @@ For each model directory under `results/`:
    on to the next model directory.
 2. For each `<test-name>` subdirectory, read the matching
    `prompts/<test-name>/prompt.md` so you understand what the model was asked
-   to do and what the strict requirements are.
-3. For each numbered run directory, evaluate the result:
+   to do and what the strict requirements are, and the test's rubric in
+   `results/.rubric/<test-name>.md` for how to evaluate it.
+3. For each numbered run directory, evaluate the result as the rubric
+   directs. For build-and-run tests that means:
    - What did the model produce (files, completeness)?
    - Does it build? Actually build it (e.g. `go build` for Go projects) and
      record success or the exact failure.
@@ -45,31 +49,16 @@ run doesn't build or run, report that honestly — do not fix it.
 Each run gets a **score out of 10**, and each test gets a **combined average
 score** across its runs, so models can be compared at a glance.
 
-Not every test is a build-and-run test. If a test's directory in `prompts/`
-contains an `answer-key.md`, score that test's runs with the key's rubric and
-follow its instructions (including any changes to the summary-table columns)
-in place of the generic rubric below. Never include an answer key in any
-model prompt.
+Every test has its own rubric in `results/.rubric/<test-name>.md`. Before
+scoring a test's runs, read that rubric and score strictly against it. A
+rubric may also adjust the report for its test — different summary-table
+columns, whether GIFs apply, where the model's output lives — and those
+instructions override the generic template below. If a test has no rubric
+file, do not invent one: leave its Score column and averages blank and note
+the missing rubric in the report.
 
-Score each run against this rubric:
+Rules that apply to every test:
 
-- **Builds (0–3):** 3 = builds cleanly as delivered; 2 = builds only after
-  routine fixes you are allowed to make (e.g. `go mod tidy`); 0 = does not
-  build. (1 is unused; building is nearly all-or-nothing.)
-- **Runs (0–2):** 2 = starts and runs without crashing; 1 = runs but with
-  visible errors or glitches; 0 = crashes at startup or doesn't run.
-- **Meets requirements (0–3):** 3 = satisfies every strict requirement in the
-  test's `prompt.md`; deduct 1 per missed requirement, down to 0.
-- **Quality (0–2):** 2 = clean, idiomatic code with no notable defects;
-  1 = works but with sloppy or non-idiomatic code, dead code, or hallucinated/
-  unnecessary dependencies; 0 = significant bugs or badly structured code even
-  if requirements are technically met.
-
-Rules:
-
-- A run that does not build is capped at its Builds points (score ≤ 3 total);
-  do not award Runs, Requirements, or Quality points for code you could not
-  execute.
 - Report the score as a breakdown plus total, e.g. `3 + 2 + 3 + 1 = 9/10`, in
   each run's subsection, and put the total in the summary table's Score
   column.
