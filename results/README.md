@@ -11,6 +11,7 @@ report format and procedure are defined in
 | Qwen3.6-35B-A3B | [hello-go-bubbletea](Qwen3.6-35B-A3B/hello-go-bubbletea/README.md) (7.3), [pr-review](Qwen3.6-35B-A3B/pr-review/README.md) (7.0) | 7.2/10 |
 | Qwen3-Coder-Next-UD-Q4_K_M | [hello-go-bubbletea](Qwen3-Coder-Next-UD-Q4_K_M/hello-go-bubbletea/README.md) (5.3), [pr-review](Qwen3-Coder-Next-UD-Q4_K_M/pr-review/README.md) (4.8) | 5.1/10 |
 | gpt-oss-120b-GGUF | [hello-go-bubbletea](gpt-oss-120b-GGUF/hello-go-bubbletea/README.md) (5.5), [pr-review](gpt-oss-120b-GGUF/pr-review/README.md) (2.5) | 4.0/10 |
+| Kimi-Linear-48B-A3B | [hello-go-bubbletea](Kimi-Linear-48B-A3B/hello-go-bubbletea/README.md) (3.8), [pr-review](Kimi-Linear-48B-A3B/pr-review/README.md) (0.5) | 2.2/10 |
 
 *(Fable-5's pr-review score carries a disclosure: the review corpus was
 authored with Fable-5 assistance, so a same-family advantage is possible.)*
@@ -116,3 +117,39 @@ template.
 For a reviewer, missing bugs is the costlier failure, and gpt-oss misses
 them while confidently approving: three of its four runs approved PR 6 with
 no findings at all. Qwen3.6-35B remains the strongest local reviewer (7.0).
+
+## Kimi-Linear-48B-A3B: last on both tests
+
+Kimi-Linear-48B-A3B ranks below every other model tested (2.2), and below
+each of them on each test.
+
+### hello-go-bubbletea: half the runs don't compile (3.8)
+
+Two of four runs fail to build, both on hallucinated APIs: run 3 invents
+`tea.KeyQ` and `tea.KeyArrowUp`, and run 4 invents `time.TickMsg`, declares
+its types twice, and omits `Init`. The two runs that start do satisfy
+`q`-quits, which is why they score 8 and 7, but neither animates. Both
+forget to schedule a first tick, so the particle systems and color cycling
+they describe never execute, and run 1 renders with no color at all because
+it passes color names lipgloss does not recognize. Run 2 builds only as
+`go run main.go`, because a second file in the package also declares `main`.
+
+The pattern across all four runs is documentation outrunning code. Every run
+ships a README listing features that do not work, runs 2 and 4 add a
+print-only "demo" program describing the real one, and run 4's
+`PROJECT_SUMMARY.md` marks every requirement as met for a program that does
+not compile.
+
+### pr-review: no bug caught in four runs (0.5)
+
+Across 24 verdicts the model never once wrote REQUEST CHANGES. It caught
+neither planted bug in any run: PR 3's dead `spinSpeed` field was called
+correct four times, and PR 6's range-copy loop was approved four times. Run 4
+pointed at the right line of PR 6 and proposed the right fix, but called it
+a naming inconsistency. Run 3 went the other way and reported a compile
+error in PR 2, the one PR with nothing wrong. The only points scored were
+run 1's `tea.Tick` suggestion on PR 1 and its precision point.
+
+gpt-oss-120b, the previous weakest reviewer (2.5), at least found the dead
+`spinSpeed` field in three runs. Kimi's reviews mostly restate each PR
+description as praise.
